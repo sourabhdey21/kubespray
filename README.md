@@ -28,3 +28,10 @@ Regular with sudo admin rights
 
 # Without any further delay, let’s deep dive into the installation steps,
 
+
+## Once everything is deployed you will see somethig like this 
+![image](https://github.com/sourabhdey21/kubespray/assets/98477908/39844339-ae94-42bb-832c-e1860f877872)
+
+
+![image](https://github.com/sourabhdey21/kubespray/assets/98477908/9641ac0f-2eb3-4b7f-861d-0a558af006d9)
+
