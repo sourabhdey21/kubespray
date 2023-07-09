@@ -1,0 +1,25 @@
+---
+- name: Install Postgres Database 
+  hosts: "*"
+  become: true
+
+  tasks:
+    - name: Create Database Directory on host 
+      shell: |
+        mkdir -p /data/db
+    
+    - name: Deploy Postgresql Server in kubernetes cluster
+      shell: |
+        cd /home/s/
+        kubectl apply -f db-persistent-volume.yaml
+        kubectl apply -f db-volume-claim.yaml
+        kubectl apply -f db-configmap.yaml
+        kubectl apply -f db-deployment.yaml
+        kubectl apply -f db-service.yaml
+    
+
+    
+
+  vars:
+    ansible_become_pass: 123    
+
