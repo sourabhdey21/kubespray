@@ -1,0 +1,56 @@
+---
+- name: Install "kubernetes"
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Mount CD DVD Rom
+      shell: |
+        mount /dev/sr0 /cdrom
+
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+      when: ansible_os_family == 'Debian'
+  vars:
+    ansible_become_pass: 123
+
+
+- name : Build Ansible Node 
+  hosts: 192.168.198.100
+  become: true
+
+  tasks:
+    - name: Install Git 
+      apt:
+        name: git   
+        state: present
+    
+    - name: Clone git reposistory    
+      git:
+        repo: https://github.com/kubernetes-incubator/kubespray.git
+        dest:  /home/kubespray/
+    
+    - name: Install pip 
+      apt:
+        name: python3-pip
+        state:  present
+    
+    - name: Install Dependency for kubesphere   
+      ansible.builtin.shell: |
+        cd /home/kubespray/
+        pip3 install -r requirements.txt
+    
+    - name: Validate the Ansible Version 
+      ansible.builtin.command: ansible --version 
+      register: command_output 
+    
+    - name : Show Ansible Version   
+      ansible.builtin.debug:
+        var: command_output.stdout 
+  tags:
+    git
+  vars:
+    ansible_become_pass: 123
+
+    
