@@ -1,0 +1,23 @@
+---
+- name : Configuration on ansible node      
+  hosts: 192.168.198.100
+  become: true
+  gather_facts: true
+
+  tasks:
+    - name: Deploy nginx 
+      shell: |
+         kubectl create deployment demo-nginx-kubespray --image=nginx --replicas=2
+         kubectl expose deployment demo-nginx-kubespray --type NodePort --port=80
+          kubectl get  deployments.apps
+    
+    - name: Validate the nginx service                
+      ansible.builtin.command:
+         kubectl get svc demo-nginx-kubespray
+      register: command_output
+    
+    - name: View the nginx deployment status 
+      debug:
+        var: command_output.stdout_lines 
+  vars:
+    ansible_become_pass: 123
