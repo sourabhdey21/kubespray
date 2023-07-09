@@ -1,0 +1,28 @@
+---
+- name : Configuration on ansible node      
+  hosts: 192.168.198.100
+  become: true
+  gather_facts: true
+
+  tasks:
+    - name: Install sshpass & m4
+      apt:
+        name: sshpass
+    
+    - name: Copy ssh-id to all the master and worker node 
+      shell: |
+         sshpass -p "123" ssh-copy-id -i /home/s/.ssh/id_rsa.pub -o StrictHostKeyChecking=yes s@192.168.198.100
+         sshpass -p "123" ssh-copy-id -i /home/s/.ssh/id_rsa.pub -o StrictHostKeyChecking=yes s@192.168.198.101
+         sshpass -p "123" ssh-copy-id -i /home/s/.ssh/id_rsa.pub -o StrictHostKeyChecking=yes s@192.168.198.102
+         sshpass -p "123" ssh-copy-id -i /home/s/.ssh/id_rsa.pub -o StrictHostKeyChecking=yes s@192.168.198.103
+         sshpass -p "123" ssh-copy-id -i /home/s/.ssh/id_rsa.pub -o StrictHostKeyChecking=yes s@192.168.198.104
+
+    - name: Password Less Authentication with sudo without password  
+      ansible.builtin.shell:
+         echo "s ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/s
+      tags:
+        "sudo"
+    
+
+  vars:
+    ansible_become_pass: 123    
